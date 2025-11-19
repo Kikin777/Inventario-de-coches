@@ -28,7 +28,7 @@ int main() {
     Auto a1;
     a1.marca = "BMW";
     a1.modelo = "M2";
-    a1.tipo = "Sedan";
+    a1.tipo = "Coupe Deportivo";
     a1.año = 2025;
 
     a1.mostrar();
