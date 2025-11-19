@@ -26,8 +26,8 @@ int main() {
 
     // primer objeto de prueba
     Auto a1;
-    a1.marca = "Toyota";
-    a1.modelo = "Corolla";
+    a1.marca = "BMW";
+    a1.modelo = "M2";
     a1.tipo = "Sedan";
     a1.año = 2025;
 
