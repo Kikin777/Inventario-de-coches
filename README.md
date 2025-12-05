@@ -118,7 +118,11 @@ Dónde está:
 En `autos.cpp` y en `README.md`.
 
 
+<<<<<<< HEAD
 **6. Uso de github y organización del repositorio**
+=======
+## 6. Uso de github y organización del repositorio ##
+>>>>>>> 633bb93 (Actualizo README)
 **antes:**  
 El repositorio no tenía `README.md` y tenía archivos que no eran parte
 del proyecto (por ejemplo, carpetas de configuración).
