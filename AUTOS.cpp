@@ -1,26 +1,48 @@
-/*Este proyecto es un sistema de invnetario de autoss. La idea es trabajar con una clase base 
-(Auto) y diferentes tipos de autos como Sedan, SUV y Deportivo. 
-Cada tipo comparte características básicas, pero también tiene su propio 
-comportamiento (aceleracion, consumo de gasolina, autonomia, entre otros).  
+/*
+Sistema de inventario de autos 
+Enrique Rios Rosas
+A01710460
 */
 
 #include <iostream>
 #include <string>
+#include <vector>
+
 using namespace std;
 
+// clase motor representa el motor de un auto
 class Motor {
+private:
+    int caballos;   // potencia del motor
+    float litros;   // tamaño del motor
+
 public:
-    string tipo;
-    int caballos;
-    float consumoBase;
+    // constructor por defecto
+    Motor() : caballos(0), litros(0.0f) {}
+
+    // constructor con parámetros
+    Motor(int caballos, float litros) : caballos(caballos), litros(litros) {}
+
+    // regresa caballos del motor
+    int getCaballos() const { return caballos; }
+
+    // regresa litros del motor
+    float getLitros() const { return litros; }
+
+    // asigna caballos del motor
+    void setCaballos(int c) { caballos = c; }
+
+    // asigna litros del motor
+    void setLitros(float l) { litros = l; }
 };
 
+// clase base auto con atributos generales
 class Auto {
-public:
+private:
     string marca;
     string modelo;
     string tipo;
-    int año;
+    int anio;
     float precio;
     int kilometraje;
     bool disponible;
@@ -28,132 +50,202 @@ public:
     float consumo;
     Motor motor;
 
-    float calcularAutonomia() {
-        return (capacidadTanque / consumo) * 100;
+public:
+    // constructor por defecto
+    Auto()
+        : marca(""), modelo(""), tipo(""), anio(0), precio(0.0f), kilometraje(0),
+          disponible(true), capacidadTanque(0.0f), consumo(1.0f), motor() {}
+
+    // constructor con parámetros
+    Auto(string marca, string modelo, string tipo, int anio,
+         float precio, int kilometraje, bool disponible,
+         float capacidadTanque, float consumo, const Motor& motor)
+        : marca(marca), modelo(modelo), tipo(tipo), anio(anio), precio(precio),
+          kilometraje(kilometraje), disponible(disponible),
+          capacidadTanque(capacidadTanque), consumo(consumo), motor(motor) {}
+
+    // getters principales
+    string getMarca() const { return marca; }
+    string getModelo() const { return modelo; }
+    string getTipo() const { return tipo; }
+    int getAnio() const { return anio; }
+    float getPrecio() const { return precio; }
+    int getKilometraje() const { return kilometraje; }
+    bool getDisponible() const { return disponible; }
+    float getCapacidadTanque() const { return capacidadTanque; }
+    float getConsumo() const { return consumo; }
+    Motor getMotor() const { return motor; }
+
+    // setters principales
+    void setMarca(const string& m) { marca = m; }
+    void setModelo(const string& m) { modelo = m; }
+    void setTipo(const string& t) { tipo = t; }
+    void setAnio(int a) { anio = a; }
+    void setPrecio(float p) { precio = p; }
+    void setKilometraje(int k) { kilometraje = k; }
+    void setDisponible(bool d) { disponible = d; }
+    void setCapacidadTanque(float c) { capacidadTanque = c; }
+    void setConsumo(float c) { consumo = c; }
+    void setMotor(const Motor& m) { motor = m; }
+
+    // calcula autonomía aproximada del auto
+    float calcularAutonomia() const {
+        return (capacidadTanque / consumo) * 100.0f;
     }
 
-    virtual void mostrar() {
-        cout << marca << " " << modelo << " - " << tipo << " (" << año << ")" << endl;
-        cout << "Precio: $" << precio << endl;
-        cout << "Km: " << kilometraje << endl;
-        cout << "Tanque: " << capacidadTanque << " L" << endl;
-        cout << "Consumo: " << consumo << " L/100km" << endl;
-        cout << "Autonomia: " << calcularAutonomia() << " km" << endl;
-        cout << "Motor: " << motor.tipo << ", " << motor.caballos << " hp" << endl;
-        cout << "Disponible: " << (disponible ? "Sí" : "No") << endl;
+    // muestra información general del auto
+    virtual void mostrarInfo() const {
+        cout << marca << " " << modelo << " - " << tipo << " (" << anio << ")" << endl;
+        cout << "precio: $" << precio << endl;
+        cout << "kilometraje: " << kilometraje << " km" << endl;
+        cout << "disponible: " << (disponible ? "si" : "no") << endl;
+        cout << "capacidad del tanque: " << capacidadTanque << " L" << endl;
+        cout << "consumo: " << consumo << " L/100km" << endl;
+        cout << "autonomia: " << calcularAutonomia() << " km" << endl;
+        cout << "motor: " << motor.getCaballos() << " hp, " << motor.getLitros() << " L" << endl;
     }
+
+    virtual ~Auto() {}
 };
 
+// clase sedan con atributo propio
 class Sedan : public Auto {
-public:
+private:
     int numeroPuertas;
 
-    void mostrar() {
-        Auto::mostrar();
-        cout << "Puertas: " << numeroPuertas << endl;
-        cout << "------------------------" << endl;
+public:
+    // constructor por defecto
+    Sedan() : Auto(), numeroPuertas(4) {}
+
+    // constructor con parámetros
+    Sedan(string marca, string modelo, int anio, float precio,
+          int kilometraje, bool disponible, float capacidadTanque,
+          float consumo, const Motor& motor, int numeroPuertas)
+        : Auto(marca, modelo, "sedan", anio, precio, kilometraje,
+               disponible, capacidadTanque, consumo, motor),
+          numeroPuertas(numeroPuertas) {}
+
+    // regresa número de puertas
+    int getNumeroPuertas() const { return numeroPuertas; }
+
+    // asigna número de puertas
+    void setNumeroPuertas(int n) { numeroPuertas = n; }
+
+    // muestra info con atributo propio
+    void mostrarInfo() const override {
+        Auto::mostrarInfo();
+        cout << "puertas: " << numeroPuertas << endl;
+        cout << "-----------------------------" << endl;
     }
 };
 
+// clase SUV con atributo extra
 class SUV : public Auto {
-public:
+private:
     bool traccion4x4;
 
-    void mostrar() {
-        Auto::mostrar();
-        cout << "Tracción 4x4: " << (traccion4x4 ? "Sí" : "No") << endl;
-        cout << "------------------------" << endl;
+public:
+    // constructor por defecto
+    SUV() : Auto(), traccion4x4(false) {}
+
+    // constructor con parámetros
+    SUV(string marca, string modelo, int anio, float precio,
+        int kilometraje, bool disponible, float capacidadTanque,
+        float consumo, const Motor& motor, bool traccion4x4)
+        : Auto(marca, modelo, "suv", anio, precio, kilometraje,
+               disponible, capacidadTanque, consumo, motor),
+          traccion4x4(traccion4x4) {}
+
+    // regresa si tiene tracción 4x4
+    bool getTraccion4x4() const { return traccion4x4; }
+
+    // asigna tracción 4x4
+    void setTraccion4x4(bool t) { traccion4x4 = t; }
+
+    // muestra info con atributo propio
+    void mostrarInfo() const override {
+        Auto::mostrarInfo();
+        cout << "Traccion 4x4: " << (traccion4x4 ? "si" : "no") << endl;
+        cout << "-----------------------------" << endl;
     }
 };
 
+// clase deportivo con aceleración 0–100
 class Deportivo : public Auto {
-public:
+private:
     float ceroACien;
 
-    void mostrar() {
-        Auto::mostrar();
-        cout << "0-100 km/h: " << ceroACien << " s" << endl;
-        cout << "------------------------" << endl;
+public:
+    // constructor por defecto
+    Deportivo() : Auto(), ceroACien(0.0f) {}
+
+    // constructor con parámetros
+    Deportivo(string marca, string modelo, int anio, float precio,
+              int kilometraje, bool disponible, float capacidadTanque,
+              float consumo, const Motor& motor, float ceroACien)
+        : Auto(marca, modelo, "deportivo", anio, precio, kilometraje,
+               disponible, capacidadTanque, consumo, motor),
+          ceroACien(ceroACien) {}
+
+    // regresa tiempo 0–100
+    float getCeroACien() const { return ceroACien; }
+
+    // asigna tiempo 0–100
+    void setCeroACien(float c) { ceroACien = c; }
+
+    // muestra info con atributo propio
+    void mostrarInfo() const override {
+        Auto::mostrarInfo();
+        cout << "aceleracion 0-100: " << ceroACien << " s" << endl;
+        cout << "-----------------------------" << endl;
     }
 };
 
-class InventarioAutos {
+// clase agencia maneja lista de autos
+class Agencia {
+private:
+    string nombre;
+    vector<Auto*> inventario;
+
 public:
-    Auto* autos[10];
-    int total;
+    // constructor con nombre
+    Agencia(const string& nombre) : nombre(nombre) {}
 
-    InventarioAutos() {
-        total = 0;
+    // agrega auto al inventario
+    void agregarAuto(Auto* autoPtr) {
+        inventario.push_back(autoPtr);
     }
 
-    void agregarAuto(Auto* a) {
-        if (total < 10) {
-            autos[total] = a;
-            total++;
-        }
-    }
-
-    void mostrarInventario() {
-        cout << "INVENTARIO" << endl;
-        for (int i = 0; i < total; i++) {
-            autos[i]->mostrar();
+    // muestra todos los autos
+    void mostrarInventario() const {
+        cout << "Inventario de la agencia: " << nombre << endl;
+        cout << "=============================" << endl;
+        for (auto autoPtr : inventario) {
+            autoPtr->mostrarInfo();
         }
     }
 };
 
 int main() {
-    InventarioAutos inventario;
+    Motor motorSedan(140, 1.8f);
+    Motor motorSUV(200, 2.5f);
+    Motor motorDeportivo(450, 3.8f);
 
-    Deportivo a1;
-    a1.marca = "BMW";
-    a1.modelo = "M2";
-    a1.tipo = "Coupe Deportivo";
-    a1.año = 2025;
-    a1.precio = 1700000;
-    a1.kilometraje = 0;
-    a1.disponible = true;
-    a1.capacidadTanque = 52;
-    a1.consumo = 9;
-    a1.motor.tipo = "Gasolina";
-    a1.motor.caballos = 460;
-    a1.motor.consumoBase = 9;
-    a1.ceroACien = 4.2;
+    Sedan sedan1("Toyota", "Corolla", 2025, 350000, 15000, true,
+                 50, 6.5, motorSedan, 4);
 
-    Sedan a2;
-    a2.marca = "Toyota";
-    a2.modelo = "Corolla";
-    a2.tipo = "Sedan";
-    a2.año = 2024;
-    a2.precio = 700000;
-    a2.kilometraje = 10000;
-    a2.disponible = true;
-    a2.capacidadTanque = 55;
-    a2.consumo = 6.5;
-    a2.motor.tipo = "Gasolina";
-    a2.motor.caballos = 140;
-    a2.motor.consumoBase = 6.5;
-    a2.numeroPuertas = 4;
+    SUV suv1("Nissan", "X-Trail", 2023, 520000, 22000, true,
+             60, 8.0, motorSUV, true);
 
-    SUV a3;
-    a3.marca = "Toyota";
-    a3.modelo = "RAV4";
-    a3.tipo = "SUV";
-    a3.año = 2023;
-    a3.precio = 850000;
-    a3.kilometraje = 5000;
-    a3.disponible = false;
-    a3.capacidadTanque = 55;
-    a3.consumo = 7.8;
-    a3.motor.tipo = "Gasolina";
-    a3.motor.caballos = 200;
-    a3.motor.consumoBase = 7.8;
-    a3.traccion4x4 = true;
+    Deportivo deportivo1("BMW", "M2", 2024, 1500000, 5000, true,
+                         59, 10.5, motorDeportivo, 3.9);
 
-    inventario.agregarAuto(&a1);
-    inventario.agregarAuto(&a2);
-    inventario.agregarAuto(&a3);
+    Agencia agencia("Agencia Matatena");
+    agencia.agregarAuto(&sedan1);
+    agencia.agregarAuto(&suv1);
+    agencia.agregarAuto(&deportivo1);
 
-    inventario.mostrarInventario();
+    agencia.mostrarInventario();
 
     return 0;
 }
