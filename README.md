@@ -7,7 +7,7 @@ también usa la clase `motor` y la clase `agencia` para mostrar composición.
 **Componentes del proyecto**
 
 Diagrama de clases  
-    Archivo: `inventario_autos_final.drawio.png  
+    Archivo: `inventario_autos_final.drawio.png'  
     Muestra:
             - clase auto
             - clases sedan, suv y deportivo con herencia
@@ -118,7 +118,7 @@ Dónde está:
 En `autos.cpp` y en `README.md`.
 
 
-**6. Uso de github y organización del repositorio**
+**6. Uso de Github y organización del repositorio**
 **antes:**  
 El repositorio no tenía `README.md` y tenía archivos que no eran parte
 del proyecto (por ejemplo, carpetas de configuración).
